@@ -17,7 +17,7 @@ const SignUp = () => {
       if (user) {
         // User is signed in, see docs for a list of available properties
         //const uid = user.uid;
-        navigation.navigate("Home");
+        navigation.navigate("HomeScreen");
       } else {
         // User is signed out
         // ...

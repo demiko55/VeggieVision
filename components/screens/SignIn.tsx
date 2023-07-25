@@ -19,11 +19,11 @@ const SignIn = () => {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      //console.log('user', user);
+      console.log('user', user);
       if (user) {
         // User is signed in, see docs for a list of available properties
         //const uid = user.uid;
-        navigation.navigate("Home");
+        navigation.navigate("HomeScreen");
       } else {
         // User is signed out
         // ...
