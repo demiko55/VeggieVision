@@ -1,9 +1,13 @@
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Button, TextInput, KeyboardAvoidingView, Image } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, TextInput, KeyboardAvoidingView, Image } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
+import { signInWithEmailAndPassword, onAuthStateChanged, FacebookAuthProvider, signInWithCredential } from "firebase/auth";
+// import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
 import { useNavigation } from '@react-navigation/core';
 import auth from '../../firebase';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
+// import { LoginManager, AccessToken } from 'react-native-fbsdk-next';
+
 
 
 const SignIn = () => {
@@ -11,8 +15,11 @@ const SignIn = () => {
   const [password, setPassword] = useState('');
 
   const navigation = useNavigation();
+
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
+      //console.log('user', user);
       if (user) {
         // User is signed in, see docs for a list of available properties
         //const uid = user.uid;
@@ -41,9 +48,27 @@ const SignIn = () => {
       });
   }
 
+  // const SignInWithFB = async () => {
+  //   const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
+  //   if (result.isCancelled) {
+  //     throw new Error('User cancelled login');
+  //   }
+  //   const data = await AccessToken.getCurrentAccessToken();
+  //   if (!data) {
+  //     throw new Error('Something went wrong obtaining access token');
+  //   }
+  //   const credential = FacebookAuthProvider.credential(data.accessToken);
+  //   // console.log('before: ', auth);
+
+  //   const user = await signInWithCredential(auth, credential);
+  //   // console.log('after')
+  //   navigation.navigate('Home');
+  // }
+
+
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
-      <Image source={require('../../assets/logo.png')} style={{ width: 40, height: 40, borderRadius: 15}} />
+      <Image source={require('../../assets/logo.png')} style={{ width: 40, height: 40, borderRadius: 15 }} />
       <Text style={styles.textMargin}>Welcome Back</Text>
       <View style={styles.inputContainer}>
         <TextInput
@@ -64,6 +89,13 @@ const SignIn = () => {
           <Text style={styles.buttonText}>Log in</Text>
         </TouchableOpacity>
       </View>
+      <View>
+        <Text style={{ textAlign: 'center', marginTop:12 }}>Don't have an account?{' '}
+          <Text onPress={() => { navigation.navigate("SignUp"); }} style={{ color: 'blue' }}>Sign up</Text>
+        </Text>
+
+      </View>
+
       <View style={{ flexDirection: 'row', alignItems: 'center', width: '60%', justifyContent: 'center', marginTop: 35, marginBottom: 20 }}>
         <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
         <View>
@@ -73,16 +105,16 @@ const SignIn = () => {
       </View>
 
       <View>
-        <TouchableOpacity style={{ backgroundColor: '#db4a39', borderRadius: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', padding: 8, marginTop: 15, width:230 }}>
-          <Icon name="google" size={15} color="#fff" style={{ marginRight: 22 }} />
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 14 }}>Sign in with Google</Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity style={{ backgroundColor: '#4267B2', borderRadius: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', padding: 8, marginTop: 15, width:230 }}>
+        <TouchableOpacity style={{ backgroundColor: '#4267B2', borderRadius: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', padding: 8, marginTop: 15, width: 230 }}>
           <Icon name="facebook" size={15} color="#fff" style={{ marginRight: 22 }} />
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 14 }}>Sign in with Facebook</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity style={{ backgroundColor: '#db4a39', borderRadius: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', padding: 8, marginTop: 15, width: 230 }}>
+          <Icon name="google" size={15} color="#fff" style={{ marginRight: 22 }} />
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 14 }}>Sign in with Google</Text>
           </View>
         </TouchableOpacity>
 
@@ -96,7 +128,7 @@ const SignIn = () => {
       </View>
 
 
-    </KeyboardAvoidingView>
+    </KeyboardAvoidingView >
 
   )
 }
@@ -135,10 +167,10 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     fontSize: 16
   },
-  textMargin:{
+  textMargin: {
     marginTop: 10,
     fontSize: 15,
-    fontWeight:'500',
+    fontWeight: '500',
     marginBottom: 20
   }
 

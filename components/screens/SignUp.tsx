@@ -67,6 +67,12 @@ const SignUp = () => {
         </TouchableOpacity>
 
       </View>
+      <View>
+        <Text style={{ textAlign: 'center', marginTop:12 }}>Already have an account?{' '}
+          <Text onPress={() => { navigation.navigate("SignIn"); }} style={{ color: 'blue' }}>Log in</Text>
+        </Text>
+
+      </View>
       <View style={{ flexDirection: 'row', alignItems: 'center', width: '60%', justifyContent: 'center', marginTop: 35, marginBottom: 20 }}>
         <View style={{ flex: 1, height: 1, backgroundColor: 'black' }} />
         <View>
