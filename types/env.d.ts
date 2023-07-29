@@ -5,4 +5,7 @@ declare module '@env' {
   export const STORAGE_BUCKET : string;
   export const MESSAGING_SENDER_ID : string;
   export const APP_ID : string
+  export const IOS_CLIENT_ID: string;
+  export const WEB_CLIENT_ID: string;
+  export const ANDRIOD_CLIENT_ID: string;
 }

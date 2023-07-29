@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, TouchableOpacity, TextInput, KeyboardAvoidingView, Image } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import {createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
+import {createUserWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import {useNavigation } from '@react-navigation/core';
 import auth from '../../firebase';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';

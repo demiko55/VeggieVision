@@ -16,15 +16,18 @@
     ],
     "ios": {
       "supportsTablet": true,
+      "bundleIdentifier": "com.demigao.veggievision"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.demigao.veggievision"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
-    }
+    },
+    "schemee":"demi"
+  }
 }

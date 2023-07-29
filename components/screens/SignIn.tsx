@@ -1,23 +1,36 @@
 import { StyleSheet, Text, View, TouchableOpacity, TextInput, KeyboardAvoidingView, Image } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { signInWithEmailAndPassword, onAuthStateChanged, FacebookAuthProvider, signInWithCredential } from "firebase/auth";
-// import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
+import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import { useNavigation } from '@react-navigation/core';
 import auth from '../../firebase';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
-// import { LoginManager, AccessToken } from 'react-native-fbsdk-next';
+import * as Google from 'expo-auth-session/providers/google';
+import * as WebBrowser from 'expo-web-browser';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {IOS_CLIENT_ID,WEB_CLIENT_ID,ANDRIOD_CLIENT_ID} from '@env'
 
 
+
+
+WebBrowser.maybeCompleteAuthSession();
 
 const SignIn = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const [userInfo, setUserInfo] = useState(null);
+  const [request, response, promptAsync] = Google.useAuthRequest({
+    androidClientId:ANDRIOD_CLIENT_ID,
+    iosClientId:IOS_CLIENT_ID,
+    webClientId:WEB_CLIENT_ID
+  })
+
+
   const navigation = useNavigation();
 
 
   useEffect(() => {
+    // email pw sign in
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       console.log('user', user);
       if (user) {
@@ -48,23 +61,35 @@ const SignIn = () => {
       });
   }
 
-  // const SignInWithFB = async () => {
-  //   const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
-  //   if (result.isCancelled) {
-  //     throw new Error('User cancelled login');
-  //   }
-  //   const data = await AccessToken.getCurrentAccessToken();
-  //   if (!data) {
-  //     throw new Error('Something went wrong obtaining access token');
-  //   }
-  //   const credential = FacebookAuthProvider.credential(data.accessToken);
-  //   // console.log('before: ', auth);
+  useEffect(()=>{
+    handleSignInWithGoogle();
+  },[response]);
 
-  //   const user = await signInWithCredential(auth, credential);
-  //   // console.log('after')
-  //   navigation.navigate('Home');
-  // }
+  const  handleSignInWithGoogle = async()=>{
+    const user = await AsyncStorage.getItem("@user");
+    if(!user){
+      if(response?.type === "success"){
+        await getUserInfo(response.authentication?.accessToken);
+      }
+    }else{
+      setUserInfo(JSON.parse(user));
+    }
+  }
+  const getUserInfo = async (token : any) =>{
+    if(!token) return;
+    try{
+      const response = await fetch(
+        "https://www.googleapis.com/userinfo/v2/me",{
+          headers:{Authorization: `Bearer ${token}`},
+        }
+      );
+      const user = await response.json();
+      await AsyncStorage.setItem("@user", JSON.stringify(user));
+      setUserInfo(user);
+    }catch(error){
 
+    }
+  }
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
@@ -105,19 +130,19 @@ const SignIn = () => {
       </View>
 
       <View>
+        <Text>{JSON.stringify(userInfo)}</Text>
+        <TouchableOpacity onPress={()=>promptAsync()} style={{ backgroundColor: '#db4a39', borderRadius: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', padding: 8, marginTop: 15, width: 230 }}>
+          <Icon name="google" size={15} color="#fff" style={{ marginRight: 22 }} />
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 14 }}>Sign in with Google</Text>
+          </View>
+        </TouchableOpacity>
         <TouchableOpacity style={{ backgroundColor: '#4267B2', borderRadius: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', padding: 8, marginTop: 15, width: 230 }}>
           <Icon name="facebook" size={15} color="#fff" style={{ marginRight: 22 }} />
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 14 }}>Sign in with Facebook</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity style={{ backgroundColor: '#db4a39', borderRadius: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', padding: 8, marginTop: 15, width: 230 }}>
-          <Icon name="google" size={15} color="#fff" style={{ marginRight: 22 }} />
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 14 }}>Sign in with Google</Text>
-          </View>
-        </TouchableOpacity>
-
         <TouchableOpacity style={{ backgroundColor: '#1DA1F2', borderRadius: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', padding: 8, width: 230, marginTop: 15 }}>
           <Icon name="twitter" size={15} color="#fff" style={{ marginRight: 22 }} />
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
