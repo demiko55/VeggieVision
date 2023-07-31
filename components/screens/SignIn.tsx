@@ -1,13 +1,13 @@
 import { StyleSheet, Text, View, TouchableOpacity, TextInput, KeyboardAvoidingView, Image } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
+import { signInWithEmailAndPassword, onAuthStateChanged, GoogleAuthProvider } from "firebase/auth";
 import { useNavigation } from '@react-navigation/core';
 import auth from '../../firebase';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as Google from 'expo-auth-session/providers/google';
 import * as WebBrowser from 'expo-web-browser';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {IOS_CLIENT_ID,WEB_CLIENT_ID,ANDRIOD_CLIENT_ID} from '@env'
+import { IOS_CLIENT_ID, WEB_CLIENT_ID, ANDRIOD_CLIENT_ID } from '@env'
 
 
 
@@ -18,12 +18,13 @@ const SignIn = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const [userInfo, setUserInfo] = useState(null);
-  const [request, response, promptAsync] = Google.useAuthRequest({
-    androidClientId:ANDRIOD_CLIENT_ID,
-    iosClientId:IOS_CLIENT_ID,
-    webClientId:WEB_CLIENT_ID
-  })
+  // const [userInfo, setUserInfo] = useState(null);
+
+  // const [request, response, promptAsync] = Google.useAuthRequest({
+  //   androidClientId: ANDRIOD_CLIENT_ID,
+  //   iosClientId: IOS_CLIENT_ID,
+  //   webClientId: WEB_CLIENT_ID
+  // })
 
 
   const navigation = useNavigation();
@@ -61,35 +62,41 @@ const SignIn = () => {
       });
   }
 
-  useEffect(()=>{
-    handleSignInWithGoogle();
-  },[response]);
+  // useEffect(() => {
+  //   handleSignInWithGoogle();
+  // }, [response]);
 
-  const  handleSignInWithGoogle = async()=>{
-    const user = await AsyncStorage.getItem("@user");
-    if(!user){
-      if(response?.type === "success"){
-        await getUserInfo(response.authentication?.accessToken);
-      }
-    }else{
-      setUserInfo(JSON.parse(user));
-    }
-  }
-  const getUserInfo = async (token : any) =>{
-    if(!token) return;
-    try{
-      const response = await fetch(
-        "https://www.googleapis.com/userinfo/v2/me",{
-          headers:{Authorization: `Bearer ${token}`},
-        }
-      );
-      const user = await response.json();
-      await AsyncStorage.setItem("@user", JSON.stringify(user));
-      setUserInfo(user);
-    }catch(error){
+  // const handleSignInWithGoogle = async () => {
+  //   const user = await AsyncStorage.getItem("@user");
+  //   if (!user) {
+  //     if (response?.type === "success") {
+  //       await getUserInfo(response.authentication?.accessToken);
+  //     }
+  //   } else {
+  //     setUserInfo(JSON.parse(user));
+  //   }
+  // }
+  // //delete local storage
+  // const handleDeleteLocalStorage = async () => {
+  //   console.log('here???');
+  //   const user = await AsyncStorage.removeItem("@user");
+  //   console.log("user after delete local storage", user);
+  // }
+  // const getUserInfo = async (token: any) => {
+  //   if (!token) return;
+  //   try {
+  //     const response = await fetch(
+  //       "https://www.googleapis.com/userinfo/v2/me", {
+  //       headers: { Authorization: `Bearer ${token}` },
+  //     }
+  //     );
+  //     const user = await response.json();
+  //     await AsyncStorage.setItem("@user", JSON.stringify(user));
+  //     setUserInfo(user);
+  //   } catch (error) {
 
-    }
-  }
+  //   }
+  // }
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
@@ -115,7 +122,7 @@ const SignIn = () => {
         </TouchableOpacity>
       </View>
       <View>
-        <Text style={{ textAlign: 'center', marginTop:12 }}>Don't have an account?{' '}
+        <Text style={{ textAlign: 'center', marginTop: 12 }}>Don't have an account?{' '}
           <Text onPress={() => { navigation.navigate("SignUp"); }} style={{ color: 'blue' }}>Sign up</Text>
         </Text>
 
@@ -131,7 +138,7 @@ const SignIn = () => {
 
       <View>
         <Text>{JSON.stringify(userInfo)}</Text>
-        <TouchableOpacity onPress={()=>promptAsync()} style={{ backgroundColor: '#db4a39', borderRadius: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', padding: 8, marginTop: 15, width: 230 }}>
+        <TouchableOpacity onPress={() => promptAsync()} style={{ backgroundColor: '#db4a39', borderRadius: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', padding: 8, marginTop: 15, width: 230 }}>
           <Icon name="google" size={15} color="#fff" style={{ marginRight: 22 }} />
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 14 }}>Sign in with Google</Text>
@@ -149,6 +156,7 @@ const SignIn = () => {
             <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 14 }}>Sign in with Twitter</Text>
           </View>
         </TouchableOpacity>
+        <TouchableOpacity onPress={() => handleSignOutWithGoogle()}><Text>sign out with google</Text></TouchableOpacity>
 
       </View>
 
