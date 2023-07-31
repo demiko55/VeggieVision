@@ -19,7 +19,6 @@ const SignIn = () => {
   const [password, setPassword] = useState('');
 
   // const [userInfo, setUserInfo] = useState(null);
-
   // const [request, response, promptAsync] = Google.useAuthRequest({
   //   androidClientId: ANDRIOD_CLIENT_ID,
   //   iosClientId: IOS_CLIENT_ID,
@@ -77,8 +76,6 @@ const SignIn = () => {
   //   }
   // }
   // //delete local storage
-  // const handleDeleteLocalStorage = async () => {
-  //   console.log('here???');
   //   const user = await AsyncStorage.removeItem("@user");
   //   console.log("user after delete local storage", user);
   // }
@@ -137,8 +134,7 @@ const SignIn = () => {
       </View>
 
       <View>
-        <Text>{JSON.stringify(userInfo)}</Text>
-        <TouchableOpacity onPress={() => promptAsync()} style={{ backgroundColor: '#db4a39', borderRadius: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', padding: 8, marginTop: 15, width: 230 }}>
+        <TouchableOpacity style={{ backgroundColor: '#db4a39', borderRadius: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', padding: 8, marginTop: 15, width: 230 }}>
           <Icon name="google" size={15} color="#fff" style={{ marginRight: 22 }} />
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 14 }}>Sign in with Google</Text>
@@ -156,7 +152,7 @@ const SignIn = () => {
             <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 14 }}>Sign in with Twitter</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => handleSignOutWithGoogle()}><Text>sign out with google</Text></TouchableOpacity>
+        <TouchableOpacity><Text>sign out with google</Text></TouchableOpacity>
 
       </View>
 

@@ -28,6 +28,11 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "schemee":"demi"
+    "schemee": "demi",
+    "extra": {
+      "eas": {
+        "projectId": "a2f3b9b1-899f-4776-8022-c0b5ff983701"
+      }
+    }
   }
 }
