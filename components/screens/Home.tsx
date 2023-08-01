@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import auth from '../../firebase';
 import { signOut } from "firebase/auth";
@@ -18,24 +17,8 @@ const HomeScreen = () => {
 
   const Tab = createBottomTabNavigator();
 
-  const handleSignOut = () => {
-    signOut(auth).then(() => {
-      // Sign-out successful.
-      navigation.navigate("Welcome");
-    }).catch((error) => {
-      // An error happened.
-    });
 
-  }
   return (
-    // <View style={styles.container}>
-    //   <Text>Email: {auth.currentUser?.email}</Text>
-    //   <TouchableOpacity style={styles.button} onPress={handleSignOut}>
-    //     <Text style={styles.buttonText}>Sign out</Text>
-    //   </TouchableOpacity>
-
-    //   <StatusBar style="auto" />
-    // </View>
     <Tab.Navigator
     screenOptions={({ route }) => ({
       tabBarIcon: ({ focused, color, size }) => {

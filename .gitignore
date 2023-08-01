@@ -27,6 +27,7 @@ node_modules
 
 # Xcode
 #
+ios/
 build/
 *.pbxuser
 !default.pbxuser
@@ -47,6 +48,7 @@ project.xcworkspace
 
 # Android/IntelliJ
 #
+android/
 build/
 .idea
 .gradle

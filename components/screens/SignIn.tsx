@@ -1,16 +1,13 @@
 import { StyleSheet, Text, View, TouchableOpacity, TextInput, KeyboardAvoidingView, Image } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { signInWithEmailAndPassword, onAuthStateChanged, GoogleAuthProvider } from "firebase/auth";
+import { signInWithEmailAndPassword, onAuthStateChanged, GoogleAuthProvider, signInWithCredential } from "firebase/auth";
 import { useNavigation } from '@react-navigation/core';
 import auth from '../../firebase';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as Google from 'expo-auth-session/providers/google';
 import * as WebBrowser from 'expo-web-browser';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { IOS_CLIENT_ID, WEB_CLIENT_ID, ANDRIOD_CLIENT_ID } from '@env'
-
-
-
+import { IOS_CLIENT_ID, ANDRIOD_CLIENT_ID } from '@env'
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -18,12 +15,11 @@ const SignIn = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  // const [userInfo, setUserInfo] = useState(null);
-  // const [request, response, promptAsync] = Google.useAuthRequest({
-  //   androidClientId: ANDRIOD_CLIENT_ID,
-  //   iosClientId: IOS_CLIENT_ID,
-  //   webClientId: WEB_CLIENT_ID
-  // })
+  const [userInfo, setUserInfo] = useState(null);
+  const [request, response, promptAsync] = Google.useAuthRequest({
+    androidClientId: ANDRIOD_CLIENT_ID,
+    iosClientId: IOS_CLIENT_ID
+  })
 
 
   const navigation = useNavigation();
@@ -36,6 +32,7 @@ const SignIn = () => {
       if (user) {
         // User is signed in, see docs for a list of available properties
         //const uid = user.uid;
+        setUserInfo(user);
         navigation.navigate("HomeScreen");
       } else {
         // User is signed out
@@ -61,10 +58,20 @@ const SignIn = () => {
       });
   }
 
+  useEffect(()=>{
+    if(response?.type == 'success'){
+      const {id_token} = response.params;
+      const credential = GoogleAuthProvider.credential(id_token);
+      signInWithCredential(auth, credential);
+    }
+
+  }, [response]);
+
   // useEffect(() => {
   //   handleSignInWithGoogle();
   // }, [response]);
 
+  // this is the expo-auth-session way
   // const handleSignInWithGoogle = async () => {
   //   const user = await AsyncStorage.getItem("@user");
   //   if (!user) {
@@ -134,7 +141,7 @@ const SignIn = () => {
       </View>
 
       <View>
-        <TouchableOpacity style={{ backgroundColor: '#db4a39', borderRadius: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', padding: 8, marginTop: 15, width: 230 }}>
+        <TouchableOpacity onPress={()=>promptAsync()} style={{ backgroundColor: '#db4a39', borderRadius: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', padding: 8, marginTop: 15, width: 230 }}>
           <Icon name="google" size={15} color="#fff" style={{ marginRight: 22 }} />
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 14 }}>Sign in with Google</Text>
@@ -152,11 +159,7 @@ const SignIn = () => {
             <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 14 }}>Sign in with Twitter</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity><Text>sign out with google</Text></TouchableOpacity>
-
       </View>
-
-
     </KeyboardAvoidingView >
 
   )

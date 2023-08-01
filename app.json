@@ -28,7 +28,7 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "schemee": "demi",
+    "scheme": "VeggieVision",
     "extra": {
       "eas": {
         "projectId": "a2f3b9b1-899f-4776-8022-c0b5ff983701"
