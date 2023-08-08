@@ -7,7 +7,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as Google from 'expo-auth-session/providers/google';
 import * as WebBrowser from 'expo-web-browser';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { IOS_CLIENT_ID, ANDRIOD_CLIENT_ID } from '@env'
+import { IOS_CLIENT_ID, ANDRIOD_CLIENT_ID, WEB_CLIENT_ID } from '@env'
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -18,7 +18,8 @@ const SignIn = () => {
   const [userInfo, setUserInfo] = useState(null);
   const [request, response, promptAsync] = Google.useAuthRequest({
     androidClientId: ANDRIOD_CLIENT_ID,
-    iosClientId: IOS_CLIENT_ID
+    iosClientId: IOS_CLIENT_ID,
+    webClientId: WEB_CLIENT_ID
   })
 
 

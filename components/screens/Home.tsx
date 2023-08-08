@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import auth from '../../firebase';
-import { signOut } from "firebase/auth";
-import { useNavigation } from '@react-navigation/core';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import HomeTab from '../TabScreen/HomeTab';
@@ -13,10 +10,7 @@ import ProfileTab from '../TabScreen/ProfileTab';
 
 
 const HomeScreen = () => {
-  const navigation = useNavigation();
-
   const Tab = createBottomTabNavigator();
-
 
   return (
     <Tab.Navigator
@@ -46,7 +40,6 @@ const HomeScreen = () => {
       <Tab.Screen name="Favorites" component={FavoritesTab} options={{ headerShown: false }}/>
       <Tab.Screen name="Profile" component={ProfileTab} options={{ headerShown: false }}/>
     </Tab.Navigator>
-
   );
 }
 
