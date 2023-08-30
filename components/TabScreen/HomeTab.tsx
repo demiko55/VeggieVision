@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, ScrollView, Text, TouchableOpacity, Image, StatusBar, View } from 'react-native';
+import { StyleSheet, ScrollView, Text, TouchableOpacity, Image, StatusBar, View, FlatList } from 'react-native';
 import { SafeAreaView } from 'react-native';
 import { API_KEY, API_SECRET, CLOUD_NAME } from '@env'
 import axios from 'axios';
@@ -46,43 +46,36 @@ const HomeTab = () => {
 
   console.log(images);
 
-  return (
-    <SafeAreaView style={styles.container}>
-      <View style= {styles.row}>
-      {
-        images.map((public_id) => {
-          console.log('here?????????', public_id);
-          const myImage = cld.image(public_id);
-          return (
-            <View key={public_id}>
-              <AdvancedImage cldImg={myImage} style={styles.image} />
+  const renderItem = ({ item, index }) => {
+    const myImage = cld.image(item);
+           return (
+             <View key={item}>
+               <AdvancedImage cldImg={myImage} style={styles.image} />
             </View>
-          )
-        })
-      }
-      </View>
-    </SafeAreaView>
-  )
+        )
+  };
+
+  return (
+    <FlatList
+      data={images}
+      renderItem={renderItem}
+      keyExtractor={(item, index) => index.toString()}
+      numColumns={2}
+      contentContainerStyle={styles.container}
+    />
+  );
 }
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    //flexDirection:'row',
-    alignItems: 'center'
-  },
-  scrollView: {
-    backgroundColor: 'pink'
-  },
-  row: {
-    flexDirection: 'row', // Arrange children horizontally
-    alignItems: 'center', // Align children vertically in the middle
-    justifyContent: 'flex-start', // Distribute children evenly along the main axis
-    flexWrap: 'wrap'
+    flexGrow: 1,
+    alignItems: 'flex-start',
+    marginTop:40,
+    marginLeft:17
   },
   image: {
-    width: 180,
-    height: 180,
-    margin: 5,
+    width: 185,
+    aspectRatio: 1,
+    margin: 3,
   },
 });
 export default HomeTab;
