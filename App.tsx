@@ -7,6 +7,8 @@ import SignIn from './components/screens/SignIn';
 import Welcome from './components/screens/Welcome';
 import SignUp from './components/screens/SignUp';
 
+
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {

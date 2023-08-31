@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import HomeTab from '../TabScreen/HomeTab';
 import SearchTab from '../TabScreen/SearchTab';
 import FavoritesTab from '../TabScreen/FavoritesTab';
 import ProfileTab from '../TabScreen/ProfileTab';
+import MainHome from '../TabScreen/MainHome';
 
 
 
@@ -35,7 +35,7 @@ const HomeScreen = () => {
       tabBarInactiveTintColor: 'grey',
     })}
     >
-      <Tab.Screen name="Home" component={HomeTab} options={{ headerShown: false }}/>
+      <Tab.Screen name="Home" component={MainHome} options={{ headerShown: false }}/>
       <Tab.Screen name="Search" component={SearchTab} options={{ headerShown: false }}/>
       <Tab.Screen name="Favorites" component={FavoritesTab} options={{ headerShown: false }}/>
       <Tab.Screen name="Profile" component={ProfileTab} options={{ headerShown: false }}/>
