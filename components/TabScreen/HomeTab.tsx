@@ -7,6 +7,8 @@ import { AdvancedImage } from 'cloudinary-react-native';
 import { Cloudinary } from "@cloudinary/url-gen";
 import Display from './Display';
 import { useNavigation } from '@react-navigation/native';
+import { useSelector, useDispatch } from 'react-redux';
+import {setDisplay} from '../state/actions';
 
 
 const cld = new Cloudinary({
@@ -17,6 +19,17 @@ const cld = new Cloudinary({
 
 const HomeTab = () => {
   const [images, setImages] = useState([]);
+
+  const img = useSelector(state=>state.img);
+  const dispatch = useDispatch();
+
+  const handleDisplay = (item) => {
+    const updateImg = {
+      ...img, id: item,
+    };
+    dispatch(setDisplay(updateImg));
+    navigation.navigate('Display');
+  }
 
   const url = `https://${API_KEY}:${API_SECRET}@api.cloudinary.com/v1_1/${CLOUD_NAME}/resources/search`;
 
@@ -52,18 +65,13 @@ const HomeTab = () => {
   const renderItem = ({ item, index }) => {
     const myImage = cld.image(item);
     return (
-      <TouchableOpacity key={item} onPress={handleDisplay(item)}>
+      <TouchableOpacity key={item} onPress={()=>handleDisplay(item)}>
         <AdvancedImage cldImg={myImage} style={styles.image} />
       </TouchableOpacity>
     )
   };
 
   const navigation = useNavigation();
-
-  const handleDisplay = (item) => {
-    navigation.navigate('Display');
-  }
-
   return (
     <FlatList
       data={images}

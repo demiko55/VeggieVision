@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import { View, Text, SafeAreaView, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { AdvancedImage } from 'cloudinary-react-native';
 import { Cloudinary } from "@cloudinary/url-gen";
+import { useSelector } from 'react-redux';
 
 
 const cld = new Cloudinary({
@@ -10,12 +11,11 @@ const cld = new Cloudinary({
   }
 });
 const  Display = () => {
-
-  // console.log('clickedUserIndex in Display', clickedUserIndex);
+  const img = useSelector(state=>state.img);
 
   return (
     <View>
-      <Text>9999</Text>
+      <Text>{img.id}</Text>
     </View>
   )
 }
